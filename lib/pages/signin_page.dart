@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_myinsta/pages/signup_page.dart';
 
+import 'home_page.dart';
+
 class SignInPage extends StatefulWidget {
   static const String id = 'sign_in_page';
   const SignInPage({Key? key}) : super(key: key);
@@ -15,6 +17,10 @@ class _SignInPageState extends State<SignInPage> {
 
   _callSignUpPage() {
     Navigator.pushReplacementNamed(context, SignUpPage.id);
+  }
+
+  _callHomePage() {
+    Navigator.pushReplacementNamed(context, HomePage.id);
   }
 
   @override
@@ -93,7 +99,7 @@ class _SignInPageState extends State<SignInPage> {
 
                           //#signin
                           GestureDetector(
-                            onTap: () {},
+                            onTap: _callHomePage,
                             child: Container(
                               height: 50,
                               padding: const EdgeInsets.only(left: 10, right: 10),
