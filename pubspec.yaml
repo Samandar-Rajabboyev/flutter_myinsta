@@ -11,6 +11,8 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   image_picker: ^0.8.5+3
+  flutter_icons:
+  cached_network_image: ^3.2.1
 
 dev_dependencies:
   flutter_test:

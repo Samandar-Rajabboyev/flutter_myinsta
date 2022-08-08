@@ -34,12 +34,12 @@ class _HomePageState extends State<HomePage> {
             _currentTap = index;
           });
         },
-        children: const [
-          MyFeedPage(),
-          MySearchPage(),
-          MyUploadPage(),
-          MyLikesPage(),
-          MyProfilePage(),
+        children: [
+          MyFeedPage(pageController: _pageController),
+          const MySearchPage(),
+          const MyUploadPage(),
+          const MyLikesPage(),
+          const MyProfilePage(),
         ],
       ),
       bottomNavigationBar: CupertinoTabBar(
@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
           });
         },
         currentIndex: _currentTap,
-        activeColor: const Color.fromRGBO(252, 175, 69, 1),
+        activeColor: const Color.fromRGBO(245, 96, 64, 1),
         items: const [
           BottomNavigationBarItem(
             icon: Icon(

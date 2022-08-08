@@ -82,7 +82,7 @@ class _MyUploadPageState extends State<MyUploadPage> {
             },
             icon: const Icon(
               Icons.post_add,
-              color: Color.fromRGBO(252, 175, 69, 1),
+              color: Color.fromRGBO(245, 96, 64, 1),
             ),
           ),
         ],
@@ -149,9 +149,16 @@ class _MyUploadPageState extends State<MyUploadPage> {
                       keyboardType: TextInputType.multiline,
                       minLines: 1,
                       maxLines: 5,
+                      cursorColor: const Color.fromRGBO(245, 96, 64, 1),
                       decoration: const InputDecoration(
                         hintText: "Caption",
                         hintStyle: TextStyle(fontSize: 17.0, color: Colors.black38),
+                        focusColor: Color.fromRGBO(245, 96, 64, 1),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color.fromRGBO(245, 96, 64, 1),
+                          ),
+                        ),
                       ),
                     ),
                   ),
