@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../model/post_model.dart';
+import '../services/auth_service.dart';
 
 class MyProfilePage extends StatefulWidget {
   const MyProfilePage({Key? key}) : super(key: key);
@@ -87,6 +88,15 @@ class _MyProfilePageState extends State<MyProfilePage> {
           "Profile",
           style: TextStyle(color: Colors.black, fontFamily: 'Billabong', fontSize: 25),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              AuthService.signOutUser(context);
+            },
+            icon: const Icon(Icons.exit_to_app),
+            color: const Color.fromRGBO(193, 53, 132, 1),
+          ),
+        ],
       ),
       body: Stack(
         children: [
@@ -108,7 +118,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                           borderRadius: BorderRadius.circular(70),
                           border: Border.all(
                             width: 1.5,
-                            color: const Color.fromRGBO(193, 53, 132, 1),
+                            color: const Color.fromRGBO(245, 96, 64, 1),
                           ),
                         ),
                         child: ClipRRect(

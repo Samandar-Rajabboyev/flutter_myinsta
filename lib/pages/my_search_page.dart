@@ -11,14 +11,14 @@ class MySearchPage extends StatefulWidget {
 
 class _MySearchPageState extends State<MySearchPage> {
   var searchController = TextEditingController();
-  List<User> items = [];
+  List<UserModel> items = [];
 
   @override
   void initState() {
     super.initState();
-    items.add(User(fullName: "Samandar Rajabboyev", email: "rajabboyevs404@gmail.com"));
-    items.add(User(fullName: "Samandar Rajabboyev", email: "rajabboyevs404@gmail.com"));
-    items.add(User(fullName: "Samandar Rajabboyev", email: "rajabboyevs404@gmail.com"));
+    items.add(UserModel(fullName: "Samandar Rajabboyev", email: "rajabboyevs404@gmail.com"));
+    items.add(UserModel(fullName: "Samandar Rajabboyev", email: "rajabboyevs404@gmail.com"));
+    items.add(UserModel(fullName: "Samandar Rajabboyev", email: "rajabboyevs404@gmail.com"));
   }
 
   @override
@@ -77,7 +77,7 @@ class _MySearchPageState extends State<MySearchPage> {
     );
   }
 
-  Widget _itemOfUser(User user) {
+  Widget _itemOfUser(UserModel user) {
     return SizedBox(
       height: 90,
       child: Row(

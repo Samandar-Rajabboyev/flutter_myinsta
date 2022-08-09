@@ -1,5 +1,5 @@
-class User {
+class UserModel {
   final String fullName;
   final String email;
-  User({required this.fullName, required this.email});
+  UserModel({required this.fullName, required this.email});
 }

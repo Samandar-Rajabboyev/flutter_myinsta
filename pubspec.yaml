@@ -13,6 +13,10 @@ dependencies:
   image_picker: ^0.8.5+3
   flutter_icons:
   cached_network_image: ^3.2.1
+  fluttertoast: ^8.0.9
+  shared_preferences: ^2.0.15
+  firebase_core: ^1.20.0
+  firebase_auth: ^3.6.2
 
 dev_dependencies:
   flutter_test:

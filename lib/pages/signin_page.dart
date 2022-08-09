@@ -1,6 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_myinsta/pages/signup_page.dart';
 
+import '../services/auth_service.dart';
+import '../services/prefs_service.dart';
+import '../services/utils_service.dart';
 import 'home_page.dart';
 
 class SignInPage extends StatefulWidget {
@@ -12,8 +16,38 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  bool isLoading = false;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  _doLogin() {
+    String email = emailController.text.toString().trim();
+    String password = passwordController.text.toString().trim();
+    if (email.isEmpty || password.isEmpty) return;
+
+    setState(() {
+      isLoading = true;
+    });
+    AuthService.signInUser(context, email, password).then((user) {
+      _getFirebaseUser(user);
+    });
+  }
+
+  _getFirebaseUser(Map<String, User?> map) async {
+    setState(() {
+      isLoading = false;
+    });
+    User? firebaseUser;
+    if (!map.containsKey("SUCCESS")) {
+      if (map.containsKey("ERROR")) Utils.fireToast("Check email or password");
+      return;
+    }
+    firebaseUser = map["SUCCESS"];
+    if (firebaseUser == null) return;
+
+    await Prefs.saveUserId(firebaseUser.uid);
+    Navigator.pushReplacementNamed(context, HomePage.id);
+  }
 
   _callSignUpPage() {
     Navigator.pushReplacementNamed(context, SignUpPage.id);
@@ -99,7 +133,9 @@ class _SignInPageState extends State<SignInPage> {
 
                           //#signin
                           GestureDetector(
-                            onTap: _callHomePage,
+                            onTap: () {
+                              _doLogin();
+                            },
                             child: Container(
                               height: 50,
                               padding: const EdgeInsets.only(left: 10, right: 10),
@@ -142,6 +178,11 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                   ],
                 ),
+                isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : const SizedBox.shrink(),
               ],
             )),
       ),
