@@ -2,10 +2,13 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_myinsta/model/user_model.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../model/post_model.dart';
 import '../services/auth_service.dart';
+import '../services/data_service.dart';
+import '../services/file_service.dart';
 
 class MyProfilePage extends StatefulWidget {
   const MyProfilePage({Key? key}) : super(key: key);
@@ -16,13 +19,14 @@ class MyProfilePage extends StatefulWidget {
 
 class _MyProfilePageState extends State<MyProfilePage> {
   List<Post> items = [];
-
+  bool isLoading = false;
   int axisCount = 1;
   String postImg1 =
       'https://firebasestorage.googleapis.com/v0/b/koreanguideway.appspot.com/o/develop%2Fpost.png?alt=media&token=f0b1ba56-4bf4-4df2-9f43-6b8665cdc964';
   String postImg2 =
       'https://firebasestorage.googleapis.com/v0/b/koreanguideway.appspot.com/o/develop%2Fpost2.png?alt=media&token=ac0c131a-4e9e-40c0-a75a-88e586b28b72';
 
+  String fullname = "", email = "", img_url = "";
   XFile? _image;
 
   _imgFromCamera() async {
@@ -31,6 +35,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
     setState(() {
       _image = image;
     });
+    _apiChangePhoto();
   }
 
   _imgFromGallery() async {
@@ -39,6 +44,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
     setState(() {
       _image = image;
     });
+    _apiChangePhoto();
   }
 
   void _showPicker(context) {
@@ -69,12 +75,49 @@ class _MyProfilePageState extends State<MyProfilePage> {
         });
   }
 
+  void _apiLoadUser() {
+    setState(() {
+      isLoading = true;
+    });
+    DataService.loadUser().then((value) => {
+          _showUserInfo(value),
+        });
+  }
+
+  void _apiChangePhoto() {
+    if (_image == null) return;
+    setState(() {
+      isLoading = true;
+    });
+
+    FileService.uploadUserImage(File(_image!.path)).then((downloadUrl) => {
+          _apiUpdateUser(downloadUrl!),
+        });
+  }
+
+  void _apiUpdateUser(String downloadUrl) async {
+    UserModel user = await DataService.loadUser();
+    user.img_url = downloadUrl;
+    await DataService.updateUser(user);
+    _apiLoadUser();
+  }
+
+  void _showUserInfo(UserModel user) {
+    setState(() {
+      isLoading = false;
+      fullname = user.fullname;
+      email = user.email;
+      img_url = user.img_url;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
 
     items.add(Post(postImage: postImg1, caption: "Discover more great images on our sponsor's site"));
     items.add(Post(postImage: postImg2, caption: "Discover more great images on our sponsor's site"));
+    _apiLoadUser();
   }
 
   @override
@@ -123,17 +166,15 @@ class _MyProfilePageState extends State<MyProfilePage> {
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(35),
-                          child: _image != null
-                              ? Image(
-                                  image: FileImage(
-                                    File(_image?.path ?? ''),
-                                  ),
+                          child: img_url == null || img_url.isEmpty
+                              ? const Image(
+                                  image: AssetImage("assets/images/avatar.png"),
                                   width: 70,
                                   height: 70,
                                   fit: BoxFit.cover,
                                 )
-                              : const Image(
-                                  image: AssetImage("assets/images/avatar.png"),
+                              : Image(
+                                  image: NetworkImage(img_url),
                                   width: 70,
                                   height: 70,
                                   fit: BoxFit.cover,
@@ -162,15 +203,15 @@ class _MyProfilePageState extends State<MyProfilePage> {
                   height: 10,
                 ),
                 Text(
-                  "Samandar Rajabboyev".toUpperCase(),
+                  fullname.toUpperCase(),
                   style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(
                   height: 3,
                 ),
-                const Text(
-                  "rajabboyevs404@gmail.com",
-                  style: TextStyle(color: Colors.black54, fontSize: 14, fontWeight: FontWeight.normal),
+                Text(
+                  email,
+                  style: const TextStyle(color: Colors.black54, fontSize: 14, fontWeight: FontWeight.normal),
                 ),
                 //mycounts
                 SizedBox(
@@ -292,6 +333,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
               ],
             ),
           ),
+          isLoading ? const Center(child: CircularProgressIndicator()) : const SizedBox.shrink(),
         ],
       ),
     );

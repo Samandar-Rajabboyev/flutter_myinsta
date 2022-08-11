@@ -30,7 +30,6 @@ class DataService {
     String? uid = await Prefs.loadUserId();
 
     var querySnapshot = await _firestore.collection(folder_users).orderBy("email").startAt([keyword]).get();
-    print(querySnapshot.docs.length);
 
     querySnapshot.docs.forEach((result) {
       UserModel newUser = UserModel.fromJson(result.data());

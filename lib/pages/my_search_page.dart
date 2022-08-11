@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../model/user_model.dart';
+import '../services/data_service.dart';
 
 class MySearchPage extends StatefulWidget {
   const MySearchPage({Key? key}) : super(key: key);
@@ -10,15 +11,30 @@ class MySearchPage extends StatefulWidget {
 }
 
 class _MySearchPageState extends State<MySearchPage> {
+  bool isLoading = false;
   var searchController = TextEditingController();
   List<UserModel> items = [];
+
+  void _apiSearchUsers(String keyword) {
+    setState(() {
+      isLoading = true;
+    });
+    DataService.searchUsers(keyword).then((users) => {
+          _respSearchUsers(users),
+        });
+  }
+
+  void _respSearchUsers(List<UserModel> users) {
+    setState(() {
+      items = users;
+      isLoading = false;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    items.add(UserModel(fullname: "Samandar Rajabboyev", email: "rajabboyevs404@gmail.com", password: "abs"));
-    items.add(UserModel(fullname: "Samandar Rajabboyev", email: "rajabboyevs404@gmail.com", password: "abs"));
-    items.add(UserModel(fullname: "Samandar Rajabboyev", email: "rajabboyevs404@gmail.com", password: "abs"));
+    _apiSearchUsers("");
   }
 
   @override
@@ -51,7 +67,9 @@ class _MySearchPageState extends State<MySearchPage> {
                   child: TextField(
                     style: const TextStyle(color: Colors.black87),
                     controller: searchController,
-                    onChanged: (input) {},
+                    onChanged: (input) {
+                      _apiSearchUsers(input);
+                    },
                     decoration: const InputDecoration(
                       hintText: "Search",
                       border: InputBorder.none,
@@ -72,6 +90,7 @@ class _MySearchPageState extends State<MySearchPage> {
               ],
             ),
           ),
+          isLoading ? const Center(child: CircularProgressIndicator()) : const SizedBox.shrink(),
         ],
       ),
     );
@@ -93,12 +112,19 @@ class _MySearchPageState extends State<MySearchPage> {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(22.5),
-              child: const Image(
-                image: AssetImage("assets/images/avatar.png"),
-                width: 45,
-                height: 45,
-                fit: BoxFit.cover,
-              ),
+              child: user.img_url == null || user.img_url.isEmpty
+                  ? const Image(
+                      image: AssetImage("assets/images/avatar.png"),
+                      width: 45,
+                      height: 45,
+                      fit: BoxFit.cover,
+                    )
+                  : Image(
+                      image: NetworkImage(user.img_url),
+                      width: 45,
+                      height: 45,
+                      fit: BoxFit.cover,
+                    ),
             ),
           ),
           const SizedBox(
