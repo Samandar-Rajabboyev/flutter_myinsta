@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           MyFeedPage(pageController: _pageController),
           const MySearchPage(),
-          const MyUploadPage(),
+          MyUploadPage(pageController: _pageController),
           const MyLikesPage(),
           const MyProfilePage(),
         ],

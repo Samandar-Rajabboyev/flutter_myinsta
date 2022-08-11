@@ -3,14 +3,20 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../model/post_model.dart';
+import '../services/data_service.dart';
+import '../services/file_service.dart';
+
 class MyUploadPage extends StatefulWidget {
-  const MyUploadPage({Key? key}) : super(key: key);
+  final PageController? pageController;
+  const MyUploadPage({Key? key, this.pageController}) : super(key: key);
 
   @override
   State<MyUploadPage> createState() => _MyUploadPageState();
 }
 
 class _MyUploadPageState extends State<MyUploadPage> {
+  bool isLoading = false;
   var captionController = TextEditingController();
   XFile? _image;
 
@@ -62,6 +68,40 @@ class _MyUploadPageState extends State<MyUploadPage> {
     String caption = captionController.text.toString().trim();
     if (caption.isEmpty) return;
     if (_image == null) return;
+    _apiPostImage();
+  }
+
+  void _apiPostImage() {
+    setState(() {
+      isLoading = true;
+    });
+    FileService.uploadPostImage(File(_image!.path)).then(
+      (downloadUrl) => {
+        _resPostImage(downloadUrl!),
+      },
+    );
+  }
+
+  void _resPostImage(String downloadUrl) {
+    String caption = captionController.text.toString().trim();
+    Post post = Post(caption: caption, img_post: downloadUrl);
+    _apiStorePost(post);
+  }
+
+  void _apiStorePost(Post post) async {
+    Post posted = await DataService.storePost(post);
+    DataService.storeFeed(posted).then((value) => {
+          _moveToFeed(),
+        });
+  }
+
+  void _moveToFeed() {
+    setState(() {
+      isLoading = false;
+    });
+    captionController.text = "";
+    _image = null;
+    widget.pageController?.animateToPage(0, duration: const Duration(milliseconds: 200), curve: Curves.easeIn);
   }
 
   @override
@@ -78,10 +118,11 @@ class _MyUploadPageState extends State<MyUploadPage> {
         actions: [
           IconButton(
             onPressed: () {
+              print("sasd");
               _uploadNewPost();
             },
             icon: const Icon(
-              Icons.post_add,
+              Icons.drive_folder_upload,
               color: Color.fromRGBO(245, 96, 64, 1),
             ),
           ),
@@ -166,6 +207,7 @@ class _MyUploadPageState extends State<MyUploadPage> {
               ),
             ),
           ),
+          isLoading ? const Center(child: CircularProgressIndicator()) : const SizedBox.shrink(),
         ],
       ),
     );

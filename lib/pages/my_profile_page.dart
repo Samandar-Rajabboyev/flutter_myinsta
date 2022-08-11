@@ -21,10 +21,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
   List<Post> items = [];
   bool isLoading = false;
   int axisCount = 1;
-  String postImg1 =
-      'https://firebasestorage.googleapis.com/v0/b/koreanguideway.appspot.com/o/develop%2Fpost.png?alt=media&token=f0b1ba56-4bf4-4df2-9f43-6b8665cdc964';
-  String postImg2 =
-      'https://firebasestorage.googleapis.com/v0/b/koreanguideway.appspot.com/o/develop%2Fpost2.png?alt=media&token=ac0c131a-4e9e-40c0-a75a-88e586b28b72';
+  int count_posts = 0;
 
   String fullname = "", email = "", img_url = "";
   XFile? _image;
@@ -111,13 +108,24 @@ class _MyProfilePageState extends State<MyProfilePage> {
     });
   }
 
+  void _apiLoadPosts() {
+    DataService.loadPosts().then((value) => {
+          _resLoadPosts(value),
+        });
+  }
+
+  void _resLoadPosts(List<Post> posts) {
+    setState(() {
+      items = posts;
+      count_posts = items.length;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-
-    items.add(Post(postImage: postImg1, caption: "Discover more great images on our sponsor's site"));
-    items.add(Post(postImage: postImg2, caption: "Discover more great images on our sponsor's site"));
     _apiLoadUser();
+    _apiLoadPosts();
   }
 
   @override
@@ -224,7 +232,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "11".toString(),
+                                count_posts.toString(),
                                 style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(
@@ -349,10 +357,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
               Expanded(
                 child: CachedNetworkImage(
                   width: double.infinity,
-                  imageUrl: post.postImage,
-                  placeholder: (context, url) => const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                  imageUrl: post.img_post ?? "",
+                  placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
                   errorWidget: (context, url, error) => const Icon(Icons.error),
                   fit: BoxFit.cover,
                 ),
@@ -361,7 +367,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                 height: 3,
               ),
               Text(
-                post.caption,
+                post.caption ?? "",
                 style: TextStyle(color: Colors.black87.withOpacity(0.7)),
                 maxLines: 2,
               ),

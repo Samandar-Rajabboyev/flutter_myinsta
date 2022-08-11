@@ -21,8 +21,8 @@ class _MyLikesPageState extends State<MyLikesPage> {
   @override
   void initState() {
     super.initState();
-    items.add(Post(postImage: postImg1, caption: "Discover more great images on our sponsor's site"));
-    items.add(Post(postImage: postImg2, caption: "Discover more great images on our sponsor's site"));
+    items.add(Post(img_post: postImg1, caption: "Discover more great images on our sponsor's site"));
+    items.add(Post(img_post: postImg2, caption: "Discover more great images on our sponsor's site"));
   }
 
   @override
@@ -96,7 +96,7 @@ class _MyLikesPageState extends State<MyLikesPage> {
           CachedNetworkImage(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.width,
-            imageUrl: post.postImage,
+            imageUrl: post.img_post ?? '',
             placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
             errorWidget: (context, url, error) => const Icon(Icons.error),
             fit: BoxFit.cover,

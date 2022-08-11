@@ -28,12 +28,10 @@ class FileService {
     String? uid = await Prefs.loadUserId();
     String img_name = "${uid}_${DateTime.now()}";
     Reference firebaseStorageRef = _storage.child(folder_post).child(img_name);
-    firebaseStorageRef.putFile(_image).then((p0) async {
-      if (p0.state == TaskState.success) {
-        await firebaseStorageRef.getDownloadURL().then((url) {
-          downloadUrl = url;
-        });
-      }
+    await firebaseStorageRef.putFile(_image).then((p0) async {
+      await firebaseStorageRef.getDownloadURL().then((url) {
+        downloadUrl = url;
+      });
     });
     return downloadUrl;
   }
