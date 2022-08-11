@@ -16,9 +16,9 @@ class _MySearchPageState extends State<MySearchPage> {
   @override
   void initState() {
     super.initState();
-    items.add(UserModel(fullName: "Samandar Rajabboyev", email: "rajabboyevs404@gmail.com"));
-    items.add(UserModel(fullName: "Samandar Rajabboyev", email: "rajabboyevs404@gmail.com"));
-    items.add(UserModel(fullName: "Samandar Rajabboyev", email: "rajabboyevs404@gmail.com"));
+    items.add(UserModel(fullname: "Samandar Rajabboyev", email: "rajabboyevs404@gmail.com", password: "abs"));
+    items.add(UserModel(fullname: "Samandar Rajabboyev", email: "rajabboyevs404@gmail.com", password: "abs"));
+    items.add(UserModel(fullname: "Samandar Rajabboyev", email: "rajabboyevs404@gmail.com", password: "abs"));
   }
 
   @override
@@ -111,7 +111,7 @@ class _MySearchPageState extends State<MySearchPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  user.fullName,
+                  user.fullname,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(

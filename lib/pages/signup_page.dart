@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_myinsta/model/user_model.dart';
 import 'package:flutter_myinsta/pages/signin_page.dart';
+import 'package:flutter_myinsta/services/data_service.dart';
 
 import '../services/auth_service.dart';
 import '../services/prefs_service.dart';
@@ -50,12 +52,13 @@ class _SignUpPageState extends State<SignUpPage> {
     setState(() {
       isLoading = true;
     });
+    UserModel user = UserModel(fullname: name, email: email, password: password);
     AuthService.signUpUser(context, name, email, password).then((value) => {
-          _getFirebaseUser(value),
+          _getFirebaseUser(user, value),
         });
   }
 
-  _getFirebaseUser(Map<String, User?> map) async {
+  _getFirebaseUser(UserModel user, Map<String, User?> map) async {
     setState(() {
       isLoading = false;
     });
@@ -69,7 +72,9 @@ class _SignUpPageState extends State<SignUpPage> {
     if (firebaseUser == null) return;
 
     await Prefs.saveUserId(firebaseUser.uid);
-    Navigator.pushReplacementNamed(context, HomePage.id);
+    DataService.storeUser(user).then((value) {
+      Navigator.pushReplacementNamed(context, HomePage.id);
+    });
   }
 
   _callSignInPage() {
