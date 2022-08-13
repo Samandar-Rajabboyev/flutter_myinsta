@@ -169,7 +169,7 @@ class _MyLikesPageState extends State<MyLikesPage> {
                       ),
                       IconButton(
                         onPressed: () {},
-                        icon: const Icon(FontAwesome.send),
+                        icon: const Icon(Icons.share_outlined),
                       ),
                     ],
                   ),
