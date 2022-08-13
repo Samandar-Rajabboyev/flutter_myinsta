@@ -118,7 +118,6 @@ class _MyUploadPageState extends State<MyUploadPage> {
         actions: [
           IconButton(
             onPressed: () {
-              print("sasd");
               _uploadNewPost();
             },
             icon: const Icon(

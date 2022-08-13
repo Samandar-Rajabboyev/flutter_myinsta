@@ -31,6 +31,30 @@ class _MySearchPageState extends State<MySearchPage> {
     });
   }
 
+  void _apiFollowUser(UserModel someone) async {
+    setState(() {
+      isLoading = true;
+    });
+    await DataService.followUser(someone);
+    setState(() {
+      someone.followed = true;
+      isLoading = false;
+    });
+    DataService.storePostsToMyFeed(someone);
+  }
+
+  void _apiUnfollowUser(UserModel someone) async {
+    setState(() {
+      isLoading = true;
+    });
+    await DataService.unfollowUser(someone);
+    setState(() {
+      someone.followed = false;
+      isLoading = false;
+    });
+    DataService.removePostsFromMyFeed(someone);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -82,9 +106,7 @@ class _MySearchPageState extends State<MySearchPage> {
                 Expanded(
                   child: ListView.builder(
                     itemCount: items.length,
-                    itemBuilder: (ctx, index) {
-                      return _itemOfUser(items[index]);
-                    },
+                    itemBuilder: (ctx, index) => _itemOfUser(items[index]),
                   ),
                 ),
               ],
@@ -156,7 +178,13 @@ class _MySearchPageState extends State<MySearchPage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    if (user.followed) {
+                      _apiUnfollowUser(user);
+                    } else {
+                      _apiFollowUser(user);
+                    }
+                  },
                   child: Container(
                     width: 100,
                     height: 30,
@@ -167,8 +195,8 @@ class _MySearchPageState extends State<MySearchPage> {
                         color: Colors.grey,
                       ),
                     ),
-                    child: const Center(
-                      child: Text("Follow"),
+                    child: Center(
+                      child: user.followed ? const Text("Following") : const Text("Follow"),
                     ),
                   ),
                 ),

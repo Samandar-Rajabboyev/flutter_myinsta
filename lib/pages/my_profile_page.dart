@@ -21,7 +21,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
   List<Post> items = [];
   bool isLoading = false;
   int axisCount = 1;
-  int count_posts = 0;
+  int count_posts = 0, count_followers = 0, count_following = 0;
 
   String fullname = "", email = "", img_url = "";
   XFile? _image;
@@ -105,6 +105,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
       fullname = user.fullname;
       email = user.email;
       img_url = user.img_url;
+      count_followers = user.followers_count;
+      count_following = user.following_count;
     });
   }
 
@@ -257,7 +259,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                '42'.toString(),
+                                count_followers.toString(),
                                 style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(
@@ -282,7 +284,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                '31'.toString(),
+                                count_following.toString(),
                                 style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(

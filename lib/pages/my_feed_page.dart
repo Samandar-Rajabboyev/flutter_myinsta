@@ -32,6 +32,28 @@ class _MyFeedPageState extends State<MyFeedPage> {
     });
   }
 
+  void _apiPostLike(Post post) async {
+    setState(() {
+      isLoading = true;
+    });
+    await DataService.likePost(post, true);
+    setState(() {
+      isLoading = false;
+      post.liked = true;
+    });
+  }
+
+  void _apiPostUnLike(Post post) async {
+    setState(() {
+      isLoading = true;
+    });
+    await DataService.likePost(post, false);
+    setState(() {
+      isLoading = false;
+      post.liked = false;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -145,8 +167,19 @@ class _MyFeedPageState extends State<MyFeedPage> {
               Row(
                 children: <Widget>[
                   IconButton(
-                    onPressed: () {},
-                    icon: const Icon(FontAwesome.heart_o),
+                    onPressed: () {
+                      if (!post.liked) {
+                        _apiPostLike(post);
+                      } else {
+                        _apiPostUnLike(post);
+                      }
+                    },
+                    icon: post.liked
+                        ? const Icon(
+                            FontAwesome.heart,
+                            color: Colors.red,
+                          )
+                        : const Icon(FontAwesome.heart_o),
                   ),
                   IconButton(
                     onPressed: () {},
