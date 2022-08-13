@@ -125,16 +125,16 @@ class _MyLikesPageState extends State<MyLikesPage> {
                         const SizedBox(width: 10),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
+                          children: [
                             // #username
                             Text(
-                              "Username",
-                              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                              post.fullname.toString(),
+                              style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
                             ),
                             // #date
                             Text(
-                              "February 2, 2020",
-                              style: TextStyle(fontWeight: FontWeight.normal),
+                              post.date.toString(),
+                              style: const TextStyle(fontWeight: FontWeight.normal),
                             ),
                           ],
                         ),
