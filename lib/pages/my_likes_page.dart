@@ -108,12 +108,19 @@ class _MyLikesPageState extends State<MyLikesPage> {
                         // userAvatar
                         ClipRRect(
                           borderRadius: BorderRadius.circular(40),
-                          child: const Image(
-                            image: AssetImage("assets/images/avatar.png"),
-                            width: 40,
-                            height: 40,
-                            fit: BoxFit.cover,
-                          ),
+                          child: post.img_user == null || (post.img_user?.isEmpty ?? true)
+                              ? const Image(
+                                  image: AssetImage("assets/images/avatar.png"),
+                                  width: 40,
+                                  height: 40,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image(
+                                  image: NetworkImage(post.img_user!),
+                                  width: 40,
+                                  height: 40,
+                                  fit: BoxFit.cover,
+                                ),
                         ),
                         const SizedBox(width: 10),
                         Column(
