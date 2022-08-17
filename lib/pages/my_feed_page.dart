@@ -4,6 +4,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 
 import '../model/post_model.dart';
 import '../services/data_service.dart';
+import '../services/utils_service.dart';
 
 class MyFeedPage extends StatefulWidget {
   final PageController? pageController;
@@ -52,6 +53,16 @@ class _MyFeedPageState extends State<MyFeedPage> {
       isLoading = false;
       post.liked = false;
     });
+  }
+
+  _actionRemovePost(Post post) async {
+    bool result = await Utils.dialogCommon(context, "Remove", "Do you want to remove this post", false);
+    if (result != null && result) {
+      setState(() {
+        isLoading = true;
+      });
+      DataService.removePost(post).then((value) => {_apiLoadFeeds()});
+    }
   }
 
   @override
@@ -145,7 +156,15 @@ class _MyFeedPageState extends State<MyFeedPage> {
                     ),
                   ],
                 ),
-                IconButton(onPressed: () {}, splashRadius: 24, icon: const Icon(SimpleLineIcons.options)),
+                post.mine
+                    ? IconButton(
+                        onPressed: () {
+                          _actionRemovePost(post);
+                        },
+                        splashRadius: 24,
+                        icon: const Icon(SimpleLineIcons.options),
+                      )
+                    : const SizedBox.shrink(),
               ],
             ),
           ),

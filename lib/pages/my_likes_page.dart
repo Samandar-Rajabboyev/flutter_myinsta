@@ -4,6 +4,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 
 import '../model/post_model.dart';
 import '../services/data_service.dart';
+import '../services/utils_service.dart';
 
 class MyLikesPage extends StatefulWidget {
   const MyLikesPage({Key? key}) : super(key: key);
@@ -42,17 +43,17 @@ class _MyLikesPageState extends State<MyLikesPage> {
         });
   }
 
-  // _actionRemovePost(Post post) async{
-  //   var result = await Utils.dialogCommon(context, "Insta Clone", "Do you want to remove this post?", false);
-  //   if(result != null && result){
-  //     setState(() {
-  //       isLoading = true;
-  //     });
-  //     DataService.removePost(post).then((value) => {
-  //       _apiLoadLikes(),
-  //     });
-  //   }
-  // }
+  _actionRemovePost(Post post) async {
+    var result = await Utils.dialogCommon(context, "Insta Clone", "Do you want to remove this post?", false);
+    if (result != null && result) {
+      setState(() {
+        isLoading = true;
+      });
+      DataService.removePost(post).then((value) => {
+            _apiLoadLikes(),
+          });
+    }
+  }
 
   @override
   void initState() {
@@ -140,7 +141,15 @@ class _MyLikesPageState extends State<MyLikesPage> {
                         ),
                       ],
                     ),
-                    IconButton(onPressed: () {}, splashRadius: 24, icon: const Icon(SimpleLineIcons.options)),
+                    post.mine
+                        ? IconButton(
+                            onPressed: () {
+                              _actionRemovePost(post);
+                            },
+                            splashRadius: 24,
+                            icon: const Icon(SimpleLineIcons.options),
+                          )
+                        : const SizedBox.shrink(),
                   ],
                 ),
               ),

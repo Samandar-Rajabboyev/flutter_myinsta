@@ -16,7 +16,12 @@ class DataService {
 
   // User Related
   static Future storeUser(UserModel user) async {
-    user.uid = await Prefs.loadUserId();
+    user.uid = (await Prefs.loadUserId()) ?? '';
+    Map<String, String> params = await Utils.deviceParams();
+
+    user.device_id = params["device_id"] ?? "";
+    user.device_type = params["device_type"] ?? "";
+    user.device_token = params["device_token"] ?? "";
     return _firestore.collection(folder_users).doc(user.uid).set(user.toJson());
   }
 
@@ -35,7 +40,7 @@ class DataService {
   }
 
   static Future updateUser(UserModel user) async {
-    user.uid = await Prefs.loadUserId();
+    user.uid = (await Prefs.loadUserId())!;
     return _firestore.collection(folder_users).doc(user.uid).update(user.toJson());
   }
 
@@ -207,12 +212,12 @@ class DataService {
   static Future removeFeed(Post post) async {
     String? uid = await Prefs.loadUserId();
 
-    return await _firestore.collection(folder_users).doc(uid).collection(folder_feeds).doc(post.id).delete();
+    await _firestore.collection(folder_users).doc(uid).collection(folder_feeds).doc(post.id).delete();
   }
 
   static Future removePost(Post post) async {
     String? uid = await Prefs.loadUserId();
     await removeFeed(post);
-    return await _firestore.collection(folder_users).doc(uid).collection(folder_posts).doc(post.id).delete();
+    await _firestore.collection(folder_users).doc(uid).collection(folder_posts).doc(post.id).delete();
   }
 }

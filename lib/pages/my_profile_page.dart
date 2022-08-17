@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_myinsta/model/user_model.dart';
+import 'package:flutter_myinsta/services/utils_service.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../model/post_model.dart';
@@ -120,7 +121,25 @@ class _MyProfilePageState extends State<MyProfilePage> {
     setState(() {
       items = posts;
       count_posts = items.length;
+      isLoading = false;
     });
+  }
+
+  void _actionLogout() async {
+    bool result = await Utils.dialogCommon(context, "Insta Clone", "Do you want to logout", false);
+    if (result != null && result) {
+      AuthService.signOutUser(context);
+    }
+  }
+
+  _actionRemovePost(Post post) async {
+    bool result = await Utils.dialogCommon(context, "Remove", "Do you want to remove this post", false);
+    if (result != null && result) {
+      setState(() {
+        isLoading = true;
+      });
+      DataService.removePost(post).then((value) => {_apiLoadPosts()});
+    }
   }
 
   @override
@@ -144,7 +163,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
         actions: [
           IconButton(
             onPressed: () {
-              AuthService.signOutUser(context);
+              _actionLogout();
             },
             icon: const Icon(Icons.exit_to_app),
             color: const Color.fromRGBO(193, 53, 132, 1),
@@ -351,7 +370,9 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
   Widget _itemOfPost(Post post) {
     return GestureDetector(
-        onLongPress: () {},
+        onLongPress: () {
+          _actionRemovePost(post);
+        },
         child: Container(
           margin: const EdgeInsets.all(5),
           child: Column(
