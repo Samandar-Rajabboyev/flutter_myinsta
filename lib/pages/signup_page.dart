@@ -63,6 +63,7 @@ class _SignUpPageState extends State<SignUpPage> {
       isLoading = false;
     });
     User? firebaseUser;
+    print(map);
     if (!map.containsKey("SUCCESS")) {
       if (map.containsKey("ERROR_EMAIL_ALREADY_IN_USE")) Utils.fireToast("Email already in use");
       if (map.containsKey("ERROR")) Utils.fireToast("Try again later");

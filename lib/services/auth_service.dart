@@ -39,6 +39,7 @@ class AuthService {
           map.addAll({"ERROR_EMAIL_ALREADY_IN_USE": null});
           break;
         default:
+          print(error);
           map.addAll({"ERROR": null});
       }
     }

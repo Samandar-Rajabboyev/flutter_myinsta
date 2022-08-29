@@ -25,8 +25,8 @@ class DataService {
     return _firestore.collection(folder_users).doc(user.uid).set(user.toJson());
   }
 
-  static Future<UserModel> loadUser() async {
-    String? uid = await Prefs.loadUserId();
+  static Future<UserModel> loadUser({String? userId}) async {
+    String? uid = userId ?? await Prefs.loadUserId();
     var value = await _firestore.collection(folder_users).doc(uid).get();
     UserModel user = UserModel.fromJson(value.data()!);
 
@@ -109,9 +109,9 @@ class DataService {
     return posts;
   }
 
-  static Future<List<Post>> loadPosts() async {
+  static Future<List<Post>> loadPosts({String? userId}) async {
     List<Post> posts = [];
-    String? uid = await Prefs.loadUserId();
+    String? uid = userId ?? await Prefs.loadUserId();
 
     var querySnapshot = await _firestore.collection(folder_users).doc(uid).collection(folder_posts).get();
 
