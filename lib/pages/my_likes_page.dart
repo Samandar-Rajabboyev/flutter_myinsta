@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../model/post_model.dart';
 import '../services/data_service.dart';
@@ -185,7 +186,7 @@ class _MyLikesPageState extends State<MyLikesPage> {
                         icon: const Icon(FontAwesome.heart, color: Colors.red),
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () => Share.share('Image: ${post.img_post} \n Caption: ${post.caption}'),
                         icon: const Icon(Icons.share_outlined),
                       ),
                     ],

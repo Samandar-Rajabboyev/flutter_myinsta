@@ -29,6 +29,13 @@
             {
               "client_id": "885985648143-bp7511v0ht495jmea5utptodr7bnas6q.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "515701131981-jnl3crd0v350dfvebo8oiu2pe3qqvec3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "uz.pdp.flutterMyinsta"
+              }
             }
           ]
         }
