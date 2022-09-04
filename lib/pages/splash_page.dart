@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
+import '../services/prefs_service.dart';
 import 'home_page.dart';
 
 class SplashPage extends StatefulWidget {
@@ -13,6 +15,8 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
   _initTime() {
     Timer(const Duration(seconds: 2), () {
       _callSignInPage();
@@ -23,10 +27,23 @@ class _SplashPageState extends State<SplashPage> {
     Navigator.pushReplacementNamed(context, HomePage.id);
   }
 
+  _initNotification() {
+    _firebaseMessaging.requestPermission(alert: true, badge: true, sound: true);
+    _firebaseMessaging.getNotificationSettings().asStream().listen((NotificationSettings settings) {
+      print("Settings registered: $settings");
+    });
+    _firebaseMessaging.getToken().then((String? token) {
+      assert(token != null);
+      print(token);
+      Prefs.saveFCM(token!);
+    });
+  }
+
   @override
   initState() {
     super.initState();
     _initTime();
+    _initNotification();
   }
 
   @override

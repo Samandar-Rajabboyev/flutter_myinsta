@@ -18,49 +18,63 @@ class _MyFeedPageState extends State<MyFeedPage> {
   bool isLoading = false;
   List<Post> items = [];
   void _apiLoadFeeds() {
-    setState(() {
-      isLoading = true;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = true;
+      });
+    }
     DataService.loadFeeds().then((value) => {
           _resLoadFeeds(value),
         });
   }
 
   void _resLoadFeeds(List<Post> posts) {
-    setState(() {
-      items = posts;
-      isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        items = posts;
+        isLoading = false;
+      });
+    }
   }
 
   void _apiPostLike(Post post) async {
-    setState(() {
-      isLoading = true;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = true;
+      });
+    }
     await DataService.likePost(post, true);
-    setState(() {
-      isLoading = false;
-      post.liked = true;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+        post.liked = true;
+      });
+    }
   }
 
   void _apiPostUnLike(Post post) async {
-    setState(() {
-      isLoading = true;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = true;
+      });
+    }
     await DataService.likePost(post, false);
-    setState(() {
-      isLoading = false;
-      post.liked = false;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+        post.liked = false;
+      });
+    }
   }
 
   _actionRemovePost(Post post) async {
     bool result = await Utils.dialogCommon(context, "Remove", "Do you want to remove this post", false);
     if (result != null && result) {
-      setState(() {
-        isLoading = true;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = true;
+        });
+      }
       DataService.removePost(post).then((value) => {_apiLoadFeeds()});
     }
   }

@@ -50,20 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAzQPIaGRHea2b_QABefFq-U5UeqZ1Qihg',
-    appId: '1:515701131981:android:b9c7b12a3588b7a28a7784',
-    messagingSenderId: '515701131981',
-    projectId: 'flutter-myinsta-e8051',
-    storageBucket: 'flutter-myinsta-e8051.appspot.com',
+    apiKey: 'AIzaSyBDWfENSGX_2kqlAeHdHq_AAB84FNoxz38',
+    appId: '1:885985648143:android:d1e6ddf9334e64f55a4d7a',
+    messagingSenderId: '885985648143',
+    projectId: 'flutter-myinsta-clone',
+    storageBucket: 'flutter-myinsta-clone.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyA6bqwvxeLXSLZlvGByaFNLuzZowWIHYqQ',
-    appId: '1:515701131981:ios:d2097c019799f8638a7784',
-    messagingSenderId: '515701131981',
-    projectId: 'flutter-myinsta-e8051',
-    storageBucket: 'flutter-myinsta-e8051.appspot.com',
-    iosClientId: '515701131981-jnl3crd0v350dfvebo8oiu2pe3qqvec3.apps.googleusercontent.com',
+    apiKey: 'AIzaSyDbYx4PKUxr1rlkahiqYfjUFTw39Z4MSXo',
+    appId: '1:885985648143:ios:e5514095eda535685a4d7a',
+    messagingSenderId: '885985648143',
+    projectId: 'flutter-myinsta-clone',
+    storageBucket: 'flutter-myinsta-clone.appspot.com',
+    iosClientId: '885985648143-bfqvsktael5brcnfgpedm711v2sjgbv3.apps.googleusercontent.com',
     iosBundleId: 'uz.pdp.flutterMyinsta',
   );
 }

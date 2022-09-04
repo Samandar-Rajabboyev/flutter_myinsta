@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_myinsta/pages/my_feed_page.dart';
@@ -5,6 +6,8 @@ import 'package:flutter_myinsta/pages/my_likes_page.dart';
 import 'package:flutter_myinsta/pages/my_profile_page.dart';
 import 'package:flutter_myinsta/pages/my_search_page.dart';
 import 'package:flutter_myinsta/pages/my_upload_page.dart';
+
+import '../services/utils_service.dart';
 
 class HomePage extends StatefulWidget {
   static const String id = 'home_page';
@@ -15,13 +18,29 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
   late PageController _pageController;
   int _currentTap = 0;
+
+  _initNotification() {
+    FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {});
+
+    // onMessage: When the app is open and it receives a push notification
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print("onMessage: $message");
+      Utils.showLocalNotification(message);
+    });
+
+    // replacement for onResume: When the app is in the background and opened directly from the push notification.
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {});
+  }
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
+    _initNotification();
   }
 
   @override

@@ -18,26 +18,32 @@ class _MyLikesPageState extends State<MyLikesPage> {
   List<Post> items = [];
 
   void _apiLoadLikes() {
-    setState(() {
-      isLoading = true;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = true;
+      });
+    }
     DataService.loadLikes().then((value) => {
           _resLoadLikes(value),
         });
   }
 
   void _resLoadLikes(List<Post> posts) {
-    setState(() {
-      items = posts;
-      isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        items = posts;
+        isLoading = false;
+      });
+    }
   }
 
   void _apiPostUnLike(Post post) {
-    setState(() {
-      isLoading = true;
-      post.liked = false;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = true;
+        post.liked = false;
+      });
+    }
     DataService.likePost(post, false).then((value) => {
           _apiLoadLikes(),
         });
@@ -46,9 +52,11 @@ class _MyLikesPageState extends State<MyLikesPage> {
   _actionRemovePost(Post post) async {
     var result = await Utils.dialogCommon(context, "Insta Clone", "Do you want to remove this post?", false);
     if (result != null && result) {
-      setState(() {
-        isLoading = true;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = true;
+        });
+      }
       DataService.removePost(post).then((value) => {
             _apiLoadLikes(),
           });

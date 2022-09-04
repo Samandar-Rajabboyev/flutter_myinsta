@@ -18,7 +18,6 @@ class DataService {
   static Future storeUser(UserModel user) async {
     user.uid = (await Prefs.loadUserId()) ?? '';
     Map<String, String> params = await Utils.deviceParams();
-
     user.device_id = params["device_id"] ?? "";
     user.device_type = params["device_type"] ?? "";
     user.device_token = params["device_token"] ?? "";

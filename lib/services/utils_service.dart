@@ -1,7 +1,10 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_myinsta/services/prefs_service.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -95,5 +98,23 @@ class Utils {
       });
     }
     return params;
+  }
+
+  static Future<void> showLocalNotification(RemoteMessage message) async {
+    String title = message.data['title'];
+    String body = message.data['body'];
+
+    if (Platform.isAndroid) {
+      title = message.data['title'];
+      body = message.data['body'];
+    }
+
+    var android =
+        const AndroidNotificationDetails('channelId', 'channelName', channelDescription: 'channelDescription');
+    var iOS = const IOSNotificationDetails();
+    var platform = NotificationDetails(android: android, iOS: iOS);
+
+    int id = Random().nextInt((pow(2, 31) as int) - 1);
+    await FlutterLocalNotificationsPlugin().show(id, title, body, platform);
   }
 }

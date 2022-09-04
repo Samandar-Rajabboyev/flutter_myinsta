@@ -30,18 +30,22 @@ class _MyProfilePageState extends State<MyProfilePage> {
   _imgFromCamera() async {
     XFile? image = await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 50);
 
-    setState(() {
-      _image = image;
-    });
+    if (mounted) {
+      setState(() {
+        _image = image;
+      });
+    }
     _apiChangePhoto();
   }
 
   _imgFromGallery() async {
     XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 50);
 
-    setState(() {
-      _image = image;
-    });
+    if (mounted) {
+      setState(() {
+        _image = image;
+      });
+    }
     _apiChangePhoto();
   }
 
@@ -74,9 +78,11 @@ class _MyProfilePageState extends State<MyProfilePage> {
   }
 
   void _apiLoadUser() {
-    setState(() {
-      isLoading = true;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = true;
+      });
+    }
     DataService.loadUser().then((value) => {
           _showUserInfo(value),
         });
@@ -84,9 +90,11 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
   void _apiChangePhoto() {
     if (_image == null) return;
-    setState(() {
-      isLoading = true;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = true;
+      });
+    }
 
     FileService.uploadUserImage(File(_image!.path)).then((downloadUrl) => {
           _apiUpdateUser(downloadUrl!),
@@ -101,14 +109,16 @@ class _MyProfilePageState extends State<MyProfilePage> {
   }
 
   void _showUserInfo(UserModel user) {
-    setState(() {
-      isLoading = false;
-      fullname = user.fullname;
-      email = user.email;
-      img_url = user.img_url;
-      count_followers = user.followers_count;
-      count_following = user.following_count;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+        fullname = user.fullname;
+        email = user.email;
+        img_url = user.img_url;
+        count_followers = user.followers_count;
+        count_following = user.following_count;
+      });
+    }
   }
 
   void _apiLoadPosts() {
@@ -118,11 +128,13 @@ class _MyProfilePageState extends State<MyProfilePage> {
   }
 
   void _resLoadPosts(List<Post> posts) {
-    setState(() {
-      items = posts;
-      count_posts = items.length;
-      isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        items = posts;
+        count_posts = items.length;
+        isLoading = false;
+      });
+    }
   }
 
   void _actionLogout() async {

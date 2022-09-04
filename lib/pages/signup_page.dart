@@ -25,7 +25,37 @@ class _SignUpPageState extends State<SignUpPage> {
   var passwordController = TextEditingController();
   var cpasswordController = TextEditingController();
 
-  _doSignUp() {
+  // From Diyorbek Nizomiddinov to Everyone 06:15 AM
+  dosign_up() async {
+    String name = fullnameController.text.toString().trim();
+    // String phone = phone_number_controller.text.toString().trim();
+    String email = emailController.text.toString().trim();
+    String password = passwordController.text.toString().trim();
+    String code = cpasswordController.text.toString().trim();
+    var emailVaidation = RegExp(r"^[A-z0-9.A-z0-9.!$%&'*+-/=?^_`{|}~]+@(g|e|G|E)mail+\.[A-z]+").hasMatch(email);
+    var passwordVaidation = RegExp(r"^(?=.*[0-9])(?=.*[A-Z])(?=.*[.!#$@%&'*+/=?^_`{|}~-]).{8,}$").hasMatch(password);
+    if (name.isEmpty || email.isEmpty || password.isEmpty) return;
+    setState(() {
+      isLoading = true;
+    });
+    AuthService.signUpUser(context, name, email, password).then((value) => {
+          print("checking"),
+          check(value),
+        });
+  }
+
+  check(dynamic value) async {
+    if (value != null) {
+      Navigator.pushNamed(context, HomePage.id);
+    } else {
+      Utils.fireToast("Ro'yxatdan o'tishda xatolik. Qayta urinib ko'ring.");
+    }
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  _doSignUp() async {
     String name = fullnameController.text.toString().trim();
     String email = emailController.text.toString().trim();
     String password = passwordController.text.toString().trim();
@@ -52,23 +82,27 @@ class _SignUpPageState extends State<SignUpPage> {
     setState(() {
       isLoading = true;
     });
+    print("ojkojkojkojkojkojojjkjokjok");
     UserModel user = UserModel(fullname: name, email: email, password: password);
-    AuthService.signUpUser(context, name, email, password).then((value) => {
-          _getFirebaseUser(user, value),
-        });
+    var value = await AuthService.signUpUser(context, name, email, password);
+    _getFirebaseUser(user, value);
   }
 
-  _getFirebaseUser(UserModel user, Map<String, User?> map) async {
+  _getFirebaseUser(UserModel user, Map<String, User> map) async {
     setState(() {
       isLoading = false;
     });
     User? firebaseUser;
+    print(map);
     if (!map.containsKey("SUCCESS")) {
-      if (map.containsKey("ERROR_EMAIL_ALREADY_IN_USE")) Utils.fireToast("Email already in use");
+      if (map.containsKey("ERROR_EMAIL_ALREADY_IN_USE")) Utils.fireToast("Email already in user");
+      print(map);
       if (map.containsKey("ERROR")) Utils.fireToast("Try again later");
       return;
     }
+    print("asda");
     firebaseUser = map["SUCCESS"];
+    print("asda");
     if (firebaseUser == null) return;
 
     await Prefs.saveUserId(firebaseUser.uid);
@@ -201,7 +235,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
                         //#signup
                         GestureDetector(
-                          onTap: () => _doSignUp(),
+                          onTap: () => dosign_up(),
                           child: Container(
                             height: 50,
                             padding: const EdgeInsets.only(left: 10, right: 10),

@@ -1,7 +1,7 @@
 {
   "file_generated_by": "FlutterFire CLI",
   "purpose": "FirebaseAppID & ProjectID for this Firebase app in this directory",
-  "GOOGLE_APP_ID": "1:515701131981:ios:d2097c019799f8638a7784",
-  "FIREBASE_PROJECT_ID": "flutter-myinsta-e8051",
-  "GCM_SENDER_ID": "515701131981"
+  "GOOGLE_APP_ID": "1:885985648143:ios:e5514095eda535685a4d7a",
+  "FIREBASE_PROJECT_ID": "flutter-myinsta-clone",
+  "GCM_SENDER_ID": "885985648143"
 }

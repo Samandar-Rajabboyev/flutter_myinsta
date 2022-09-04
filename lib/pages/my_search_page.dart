@@ -25,10 +25,12 @@ class _MySearchPageState extends State<MySearchPage> {
   }
 
   void _respSearchUsers(List<UserModel> users) {
-    setState(() {
-      items = users;
-      isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        items = users;
+        isLoading = false;
+      });
+    }
   }
 
   void _apiFollowUser(UserModel someone) async {
